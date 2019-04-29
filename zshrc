@@ -1,4 +1,9 @@
+export LC_ALL=en_US.UTF-8  
+export LANG=en_US.UTF-8
+
 #自动补全功能
+fpath=(~/.zsh/completion $fpath)
+eval "`pip2 completion --zsh`"
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE
@@ -66,7 +71,7 @@ export HISTFILE=~/.zhistory
 #以附加的方式写入历史纪录
 setopt INC_APPEND_HISTORY
 #如果连续输入的命令相同，历史纪录中只保留一个
-setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
 #为历史纪录中的命令添加时间戳
 setopt EXTENDED_HISTORY
 
@@ -79,23 +84,21 @@ setopt PUSHD_IGNORE_DUPS
 #setopt HIST_IGNORE_SPACE
 #}}}
 
-#标题栏、任务栏样式{{{
-case $TERM in (*xterm*|*rxvt*|(dt|k|E)term)
-preexec () { print -Pn "\e]0;%n@%M//%/\ $1\a" }
-;;
-esac
-#}}}
 
-# Show git branch name in prompt.
-function parse_git_branch() {
-    git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3 | sed -e '/^.*$/s/^\(.*\)$/[\1]/'
+
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:git*' actionformats "%s:[%b|%a]"
+zstyle ':vcs_info:git*' formats "%s:[%b]"
+precmd() {
+    vcs_info
 }
 
 autoload -U promptinit
 promptinit
 setopt prompt_subst
 autoload -U colors && colors
-export PROMPT='%F{cyan}.--%f%F{magenta}%n%f@%F{magenta}%m%f: %F{yellow}%~ %S$(parse_git_branch)%s%f '$'\n''%F{cyan}\`-->%f '
+export PROMPT='%F{cyan}.--%f%F{magenta}%n%f@%F{magenta}%m%f: %F{yellow}%~ %S${vcs_info_msg_0_}%s%f '$'\n''%F{cyan}\`-->%f '
 
 
 setopt completealiases
@@ -109,15 +112,27 @@ alias ll='ls -l'
 alias grep='grep --color=auto'
 alias tree='tree -C'
 
-#export HASKELLPATH=$HOME/Library/Haskell
-#export GOPATH=$HOME/go
-#export PATH=$PATH:$(go env GOPATH)/bin:$HASKELLPATH/bin
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+export HASKELLPATH=$HOME/Library/Haskell
+export GOPATH=$HOME/go
+export PATH=$PATH:$(go env GOPATH)/bin:$HASKELLPATH/bin
+export PATH=$PATH:$HOME/Library/Python/3.7/bin
+#export PATH=$HOME/.local/bin:$PATH
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-#export SDKMAN_DIR="/Users/an/.sdkman"
-#[[ -s "/Users/an/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/an/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="/Users/an/.sdkman"
+[[ -s "/Users/an/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/an/.sdkman/bin/sdkman-init.sh"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-#export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="$PATH:$HOME/.rvm/bin"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+if [ -z "$INSIDE_EMACS" ]; then
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+fi
+
+# zsh-bd
+. $HOME/.zsh/plugins/bd/bd.zsh
+
+source /usr/local/share/zsh/site-functions/git-flow-completion.zsh 
