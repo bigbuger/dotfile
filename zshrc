@@ -2,7 +2,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 #自动补全功能
-fpath=(~/.zsh/completion $fpath)
+fpath=($HOME/.zsh/completion $fpath)
 eval "`pip2 completion --zsh`"
 setopt AUTO_LIST
 setopt AUTO_MENU
@@ -49,7 +49,7 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 compdef pkill=killall
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:*:*:*:processes' force-list always
-zstyle ':completion:*:processes' command 'ps -au$USER'
+zstyle ':completion:*:processes' command 'ps -aU$USER'
 
 #补全类型提示分组
 zstyle ':completion:*:matches' group 'yes'
@@ -116,6 +116,8 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 export HASKELLPATH=$HOME/Library/Haskell
 export GOPATH=$HOME/go
+export GO111MODULE=on
+
 export PATH=$PATH:$(go env GOPATH)/bin:$HASKELLPATH/bin
 export PATH=$PATH:$HOME/Library/Python/3.7/bin
 #export PATH=$HOME/.local/bin:$PATH
@@ -129,10 +131,16 @@ export PATH="$PATH:$HOME/.rvm/bin"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 if [ -z "$INSIDE_EMACS" ]; then
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+    [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+
+    [ -f $HOME/.zsh/plugins/enhancd/init.sh ] && source $HOME/.zsh/plugins/enhancd/init.Sh
+    export ENHANCD_FILTER=fzf
+    export ENHANCD_DISABLE_HOME=1
 fi
 
 # zsh-bd
-. $HOME/.zsh/plugins/bd/bd.zsh
+#. $HOME/.zsh/plugins/bd/bd.zsh
 
 source /usr/local/share/zsh/site-functions/git-flow-completion.zsh 
+
+
