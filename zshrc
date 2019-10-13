@@ -137,10 +137,11 @@ if [ -z "$INSIDE_EMACS" ]; then
     export ENHANCD_FILTER=fzf
     export ENHANCD_DISABLE_HOME=1
 fi
+export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 
 # zsh-bd
 #. $HOME/.zsh/plugins/bd/bd.zsh
 
 source /usr/local/share/zsh/site-functions/git-flow-completion.zsh 
 
-
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
