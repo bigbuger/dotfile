@@ -133,7 +133,7 @@ export PATH="$PATH:$HOME/.rvm/bin"
 if [ -z "$INSIDE_EMACS" ]; then
     [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
-    [ -f $HOME/.zsh/plugins/enhancd/init.sh ] && source $HOME/.zsh/plugins/enhancd/init.Sh
+    [ -f $HOME/.zsh/plugins/enhancd/init.sh ] && source $HOME/.zsh/plugins/enhancd/init.sh
     export ENHANCD_FILTER=fzf
     export ENHANCD_DISABLE_HOME=1
 fi
